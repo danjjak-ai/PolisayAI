@@ -27,6 +27,9 @@
 *.md
 !README.md
 /.agent/
+/.gemini/
+/tmp*/
+/.temp/
 
 # misc
 .DS_Store
