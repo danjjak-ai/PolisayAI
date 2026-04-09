@@ -81,7 +81,7 @@ export default function KOLDetailPage() {
     return (
       <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--muted-foreground)' }}>
         <Loader style={{ margin: '0 auto 1rem', animation: 'spin 1s linear infinite' }} size={30} />
-        <p>데이터 로딩 중...</p>
+        <p>データロード中...</p>
       </div>
     );
   }
@@ -95,27 +95,27 @@ export default function KOLDetailPage() {
       {/* Header */}
       <header style={{ marginBottom: '2rem' }}>
         <a href="/kol" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontSize: '0.875rem', marginBottom: '1rem' }}>
-          <ArrowLeft size={14} /> 목록으로 돌아가기
+          <ArrowLeft size={14} /> リストに戻る
         </a>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <h1 style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>{decodedId}</h1>
             <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem' }}>
-              {profile?.country === 'KR' ? '🇰🇷 대한민국' : '🇯🇵 일본'} |&nbsp;
+              {profile?.country === 'KR' ? '🇰🇷 大韓民国' : '🇯🇵 日本'} |&nbsp;
               {profile?.party || rawStats?.group || 'N/A'} |&nbsp;
-              {profile?.position || '의원'}
+              {profile?.position || '議員'}
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button onClick={fetchProfile} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)', cursor: 'pointer', fontSize: '0.85rem' }}>
-              <RefreshCw size={13} /> 새로고침
+              <RefreshCw size={13} /> リフレッシュ
             </button>
             <button
               onClick={triggerAnalysis}
               disabled={analyzing}
               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.25rem', background: analyzing ? 'var(--muted)' : 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: analyzing ? 'not-allowed' : 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
             >
-              {analyzing ? <><Loader size={13} style={{ animation: 'spin 1s linear infinite' }} /> 분석 중...</> : '🔍 AI 분석 실행'}
+              {analyzing ? <><Loader size={13} style={{ animation: 'spin 1s linear infinite' }} /> 分析中...</> : '🔍 AI分析実行'}
             </button>
           </div>
         </div>
@@ -124,10 +124,10 @@ export default function KOLDetailPage() {
       {/* Summary Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         {[
-          { label: '총 발언 수 (로컬)', value: rawStats?.speechCount?.toLocaleString() ?? '—', icon: <MessageCircle size={16} />, color: 'var(--primary)' },
-          { label: '참여 회의 수', value: rawStats?.meetingCount ?? '—', icon: <Calendar size={16} />, color: 'var(--chart-3)' },
-          { label: 'AI 분석 완료', value: profile?.recentActivity?.length ?? 0, icon: <BarChart3 size={16} />, color: 'var(--chart-2)' },
-          { label: '토픽 분류 수', value: allTopics.length, icon: <Tag size={16} />, color: 'var(--chart-1)' },
+          { label: '総発言数 (ローカル)', value: rawStats?.speechCount?.toLocaleString() ?? '—', icon: <MessageCircle size={16} />, color: 'var(--primary)' },
+          { label: '参加会議数', value: rawStats?.meetingCount ?? '—', icon: <Calendar size={16} />, color: 'var(--chart-3)' },
+          { label: 'AI分析完了', value: profile?.recentActivity?.length ?? 0, icon: <BarChart3 size={16} />, color: 'var(--chart-2)' },
+          { label: 'トピック分類数', value: allTopics.length, icon: <Tag size={16} />, color: 'var(--chart-1)' },
         ].map((s, i) => (
           <div key={i} className="glass" style={{ padding: '1.25rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
@@ -147,10 +147,10 @@ export default function KOLDetailPage() {
             <div className="glass" style={{ padding: '1.75rem', border: '1px solid rgba(59,130,246,0.3)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h2 style={{ fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Database size={18} color="var(--primary)" /> API 원문 발언 내역 (미분석)
+                  <Database size={18} color="var(--primary)" /> API原文発言履歴 (未分析)
                 </h2>
                 <span style={{ fontSize: '0.75rem', background: 'rgba(59,130,246,0.15)', color: 'var(--primary)', padding: '0.2rem 0.6rem', borderRadius: '12px' }}>
-                  최근 {rawSpeeches.length}건 미리보기
+                  最近 {rawSpeeches.length}件 プレビュー
                 </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -171,7 +171,7 @@ export default function KOLDetailPage() {
 
           <div className="glass" style={{ padding: '1.75rem' }}>
             <h2 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <MessageCircle size={18} color="var(--primary)" /> AI 분석 발언 타임라인
+              <MessageCircle size={18} color="var(--primary)" /> AI分析発言タイムライン
             </h2>
             {profile?.recentActivity?.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -184,11 +184,11 @@ export default function KOLDetailPage() {
                       <div style={{ position: 'absolute', left: '-5px', top: '4px', width: '8px', height: '8px', background: 'var(--primary)', borderRadius: '50%' }} />
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                         <span style={{ fontSize: '0.7rem', color: 'var(--muted-foreground)' }}>
-                          {new Date(activity.created_at).toLocaleDateString('ko-KR')}
+                          {new Date(activity.created_at).toLocaleDateString('ja-JP')}
                         </span>
                         {activity.policy_relevance > 0 && (
                           <span style={{ fontSize: '0.7rem', background: 'rgba(59,130,246,0.15)', color: 'var(--primary)', padding: '0.1rem 0.5rem', borderRadius: '8px' }}>
-                            관련도 {(activity.policy_relevance * 100).toFixed(0)}%
+                            関連度 {(activity.policy_relevance * 100).toFixed(0)}%
                           </span>
                         )}
                       </div>
@@ -212,8 +212,8 @@ export default function KOLDetailPage() {
             ) : (
               <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--muted-foreground)' }}>
                 <Database size={36} style={{ opacity: 0.35, margin: '0 auto 1rem', display: 'block' }} />
-                <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>AI 분석된 발언 기록이 없습니다.</p>
-                <p style={{ fontSize: '0.8rem' }}>우측 상단 <strong>AI 분석 실행</strong> 버튼으로 분석을 시작하세요.</p>
+                <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>AI分析された発言記録がありません。</p>
+                <p style={{ fontSize: '0.8rem' }}>右上の <strong>AI分析実行</strong> ボタンで分析を開始してください。</p>
               </div>
             )}
           </div>
@@ -221,7 +221,7 @@ export default function KOLDetailPage() {
           {/* Analysis result panel */}
           {analyzeResult && (
             <div className="glass" style={{ padding: '1.5rem', border: '1px solid var(--chart-2)', borderRadius: '12px' }}>
-              <h3 style={{ color: 'var(--chart-2)', marginBottom: '1rem', fontSize: '1rem' }}>📊 방금 분석 결과</h3>
+              <h3 style={{ color: 'var(--chart-2)', marginBottom: '1rem', fontSize: '1rem' }}>📊 分析結果</h3>
               <pre style={{ fontSize: '0.8rem', background: 'rgba(0,0,0,0.25)', padding: '1rem', borderRadius: '8px', overflowX: 'auto', lineHeight: 1.6 }}>
                 {JSON.stringify(analyzeResult.analysis, null, 2)}
               </pre>
@@ -234,7 +234,7 @@ export default function KOLDetailPage() {
           {/* Key topics */}
           <div className="glass" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Tag size={16} color="var(--primary)" /> 주요 관심 토픽
+              <Tag size={16} color="var(--primary)" /> 主要関心トピック
             </h3>
             {allTopics.length > 0 ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -243,25 +243,25 @@ export default function KOLDetailPage() {
                 ))}
               </div>
             ) : (
-              <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8rem' }}>분석 후 자동으로 추출됩니다.</p>
+              <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8rem' }}>分析後に自動的に抽出されます。</p>
             )}
           </div>
 
           {/* Raw data stats from JSON files */}
           {rawStats && (
             <div className="glass" style={{ padding: '1.5rem' }}>
-              <h3 style={{ fontSize: '0.95rem', marginBottom: '1rem' }}>📁 로컬 데이터 기준 통계</h3>
+              <h3 style={{ fontSize: '0.95rem', marginBottom: '1rem' }}>📁 ローカルデータ基準統計</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                  <span style={{ color: 'var(--muted-foreground)' }}>총 발언 기록</span>
-                  <strong style={{ color: 'var(--primary)' }}>{rawStats.speechCount.toLocaleString()}건</strong>
+                  <span style={{ color: 'var(--muted-foreground)' }}>総発言記録</span>
+                  <strong style={{ color: 'var(--primary)' }}>{rawStats.speechCount.toLocaleString()}件</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                  <span style={{ color: 'var(--muted-foreground)' }}>참여 회의</span>
-                  <strong>{rawStats.meetingCount}개</strong>
+                  <span style={{ color: 'var(--muted-foreground)' }}>参加会議</span>
+                  <strong>{rawStats.meetingCount}個</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                  <span style={{ color: 'var(--muted-foreground)' }}>소속 그룹</span>
+                  <span style={{ color: 'var(--muted-foreground)' }}>所属グループ</span>
                   <strong style={{ maxWidth: '150px', textAlign: 'right', wordBreak: 'break-word' }}>{rawStats.group}</strong>
                 </div>
               </div>

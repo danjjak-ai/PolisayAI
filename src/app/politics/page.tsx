@@ -105,10 +105,10 @@ export default function PolicyTrackingPage() {
       <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Policy Trend Tracking</h1>
-          <p style={{ color: 'var(--muted-foreground)' }}>다운로드된 국회 데이터 기반 정책 키워드 시계열 분석 ({trends.length}개 날짜 구간)</p>
+          <p style={{ color: 'var(--muted-foreground)' }}>ダウンロードされた国会データに基づく政策キーワード時系列分析 ({trends.length}個の日付区間)</p>
         </div>
         <button onClick={fetchData} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)', cursor: 'pointer' }}>
-          <RefreshCw size={14} /> 새로고침
+          <RefreshCw size={14} /> リフレッシュ
         </button>
       </header>
 
@@ -117,7 +117,7 @@ export default function PolicyTrackingPage() {
         <div className="glass" style={{ padding: '2rem', minHeight: '500px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <h2 style={{ fontSize: '1.125rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <TrendingUp size={18} color="var(--primary)" /> 정책 토픽 언급 추이
+              <TrendingUp size={18} color="var(--primary)" /> 政策トピック言及推移
             </h2>
             {/* Topic toggle buttons */}
             {topicKeys.length > 1 && (
@@ -147,13 +147,13 @@ export default function PolicyTrackingPage() {
             {loading ? (
               <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem', color: 'var(--muted-foreground)' }}>
                 <div className="loader" />
-                <p style={{ fontSize: '0.875rem' }}>데이터 분석 중...</p>
+                <p style={{ fontSize: '0.875rem' }}>データ分析中...</p>
               </div>
             ) : trends.length === 0 ? (
               <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem', color: 'var(--muted-foreground)' }}>
                 <Database size={40} style={{ opacity: 0.4 }} />
-                <p style={{ fontSize: '0.875rem' }}>데이터가 없습니다. 데이터 센터에서 먼저 수집하세요.</p>
-                <a href="/admin/data" style={{ color: 'var(--primary)', fontSize: '0.875rem' }}>→ 데이터 센터로 이동</a>
+                <p style={{ fontSize: '0.875rem' }}>データがありません。データセンターで先に収集してください。</p>
+                <a href="/admin/data" style={{ color: 'var(--primary)', fontSize: '0.875rem' }}>→ データセンターへ移動</a>
               </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
@@ -197,7 +197,7 @@ export default function PolicyTrackingPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div className="glass" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Calendar size={16} /> 언급량 피크 날짜
+              <Calendar size={16} /> 言及量ピーク日
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {recentPeaks.map((t, i) => {
@@ -205,17 +205,17 @@ export default function PolicyTrackingPage() {
                 return (
                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
                     <span style={{ color: 'var(--muted-foreground)' }}>{t.date}</span>
-                    <span style={{ fontWeight: 'bold', color: 'var(--primary)' }}>{total}건</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--primary)' }}>{total}件</span>
                   </div>
                 );
               })}
-              {recentPeaks.length === 0 && <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8rem' }}>데이터 없음</p>}
+              {recentPeaks.length === 0 && <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8rem' }}>データなし</p>}
             </div>
           </div>
 
           <div className="glass" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Filter size={16} /> 활성 토픽
+              <Filter size={16} /> 有効なトピック
             </h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
               {(summary?.topTopics || []).map((t: any) => (
@@ -230,12 +230,12 @@ export default function PolicyTrackingPage() {
                   {t.name} ({t.count})
                 </span>
               ))}
-              {!summary?.topTopics?.length && <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8rem' }}>데이터 없음</p>}
+              {!summary?.topTopics?.length && <p style={{ color: 'var(--muted-foreground)', fontSize: '0.8rem' }}>データなし</p>}
             </div>
           </div>
 
           <a href="/admin/data" className="button-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            데이터 추가 수집 <ChevronRight size={16} />
+            データの追加収集 <ChevronRight size={16} />
           </a>
         </div>
       </div>

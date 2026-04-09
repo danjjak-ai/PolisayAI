@@ -107,7 +107,7 @@ export default function NDLAdminPage() {
       ...Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''))
     });
     
-    setStatus({ status: 'running', currentPage: 0, totalPage: pages, logs: ['수집 요청 전송 중...'] });
+    setStatus({ status: 'running', currentPage: 0, totalPage: pages, logs: ['収集リクエスト送信中...'] });
     fetch(`/api/ndl/download?${searchParams.toString()}`);
     setTimeout(fetchStatus, 500);
   };
@@ -123,16 +123,16 @@ export default function NDLAdminPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <header style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>데이터 센터</h1>
-        <p style={{ color: 'var(--muted-foreground)' }}>한/일 정책 데이터 및 소셜 여론 수집 멀티 제어 시스템</p>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>データセンター</h1>
+        <p style={{ color: 'var(--muted-foreground)' }}>日/韓 政策データおよびソーシャル世論収集マルチ制御システム</p>
       </header>
 
       {/* Source Selector Tabs */}
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
         {[
-          { id: 'JP', label: '일본 국회 (NDL)', icon: <Globe2 size={16} /> },
-          { id: 'KR', label: '대한민국 국회 (OpenAPI)', icon: <Globe2 size={16} /> },
-          { id: 'SOCIAL', label: '소셜/커뮤니티 (Scraper)', icon: <Share2 size={16} /> }
+          { id: 'JP', label: '日本国会 (NDL)', icon: <Globe2 size={16} /> },
+          { id: 'KR', label: '大韓民国国会 (OpenAPI)', icon: <Globe2 size={16} /> },
+          { id: 'SOCIAL', label: 'ソーシャル/コミュニティ (Scraper)', icon: <Share2 size={16} /> }
         ].map(s => (
           <button
             key={s.id}
@@ -159,27 +159,27 @@ export default function NDLAdminPage() {
         {/* Advanced Config Section */}
         <section className="glass" style={{ padding: '2rem' }}>
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Settings2 size={20} /> 상세 수집 설정 ({source})
+            <Settings2 size={20} /> 詳細収集設定 ({source})
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>기본 키워드</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>基本キーワード</label>
                 <input value={query} onChange={e => setQuery(e.target.value)} style={inputStyle} />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>수집 페이지</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>収集ページ数</label>
                 <input type="number" value={pages} onChange={e => setPages(parseInt(e.target.value))} style={inputStyle} />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>시작일</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>開始日</label>
                 <input type="date" value={params.from} onChange={e => setParams({...params, from: e.target.value})} style={inputStyle} />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>종료일</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>終了日</label>
                 <input type="date" value={params.until} onChange={e => setParams({...params, until: e.target.value})} style={inputStyle} />
               </div>
             </div>
@@ -188,12 +188,12 @@ export default function NDLAdminPage() {
             {source === 'JP' && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>발언자 (Speaker)</label>
-                  <input value={params.speaker} onChange={e => setParams({...params, speaker: e.target.value})} placeholder="예: 岸田" style={inputStyle} />
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>発言者 (Speaker)</label>
+                  <input value={params.speaker} onChange={e => setParams({...params, speaker: e.target.value})} placeholder="例: 岸田" style={inputStyle} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>정당/회파 (Group)</label>
-                  <input value={params.speakerGroup} onChange={e => setParams({...params, speakerGroup: e.target.value})} placeholder="예: 自民党" style={inputStyle} />
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>政党/会派 (Group)</label>
+                  <input value={params.speakerGroup} onChange={e => setParams({...params, speakerGroup: e.target.value})} placeholder="例: 自民党" style={inputStyle} />
                 </div>
               </div>
             )}
@@ -201,22 +201,22 @@ export default function NDLAdminPage() {
             {source === 'KR' && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>제안자 (Proposer)</label>
-                  <input value={params.proposer} onChange={e => setParams({...params, proposer: e.target.value})} placeholder="예: 홍길동" style={inputStyle} />
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>提案者 (Proposer)</label>
+                  <input value={params.proposer} onChange={e => setParams({...params, proposer: e.target.value})} placeholder="例: 洪吉童" style={inputStyle} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>국회 대수 (Age)</label>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>国会回数 (Age)</label>
                   <select value={params.age} onChange={e => setParams({...params, age: e.target.value})} style={inputStyle}>
-                    <option value="22">22대</option>
-                    <option value="21">21대</option>
-                    <option value="20">20대</option>
+                    <option value="22">22代</option>
+                    <option value="21">21代</option>
+                    <option value="20">20代</option>
                   </select>
                 </div>
               </div>
             )}
 
             <button onClick={startDownload} style={btnStyle} disabled={status?.status === 'running'}>
-              <Play size={18} /> {source} 데이터 수집 시작
+              <Play size={18} /> {source} データ収集開始
             </button>
           </div>
         </section>
@@ -224,7 +224,7 @@ export default function NDLAdminPage() {
         {/* Monitoring Side (Same as before but context-aware) */}
         <section className="glass" style={{ padding: '2rem' }}>
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Activity size={20} /> 실시간 상태 모니터
+            <Activity size={20} /> リアルタイム状態モニター
           </h2>
           {status && status.status !== 'idle' ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -252,30 +252,30 @@ export default function NDLAdminPage() {
               </div>
             </div>
           ) : (
-            <p style={{ color: 'var(--muted-foreground)' }}>준비 완료. 파라미터를 설정하고 수집을 시작하세요.</p>
+            <p style={{ color: 'var(--muted-foreground)' }}>準備完了。パラメータを設定して収集を開始してください。</p>
           )}
         </section>
 
         {/* Policy Category Management */}
         <section className="glass" style={{ padding: '2rem', gridColumn: 'span 2' }}>
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Settings2 size={20} /> AI 정책 카테고리 관리 (키워드 매핑)
+            <Settings2 size={20} /> AI政策カテゴリー管理 (キーワードマッピング)
           </h2>
           <p style={{ color: 'var(--muted-foreground)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-            분석 엔진이 텍스트를 파싱할 때 인식할 정책 카테고리와 매칭 키워드를 설정하세요. 여기에 추가된 카테고리는 전체 대시보드와 정책 추이에 동적으로 반영됩니다.
+            分析エンジンがテキストを解析する際に認識する政策カテゴリーと一致するキーワードを設定します。ここに追加されたカテゴリーは、ダッシュボード全体と政策推移に動的に反映されます。
           </p>
           
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', alignItems: 'flex-end' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>카테고리명 (예: 경제)</label>
-              <input value={newCatName} onChange={e => setNewCatName(e.target.value)} style={inputStyle} placeholder="신규 카테고리 로벨" />
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>カテゴリー名 (例: 経済)</label>
+              <input value={newCatName} onChange={e => setNewCatName(e.target.value)} style={inputStyle} placeholder="新規カテゴリーラベル" />
             </div>
             <div style={{ flex: 2 }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>스캔 키워드 (쉼표 구분)</label>
-              <input value={newCatKeywords} onChange={e => setNewCatKeywords(e.target.value)} style={inputStyle} placeholder="예: 경제, 펀드, 주식, 물가" />
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>スキャンキーワード (カンマ区切り)</label>
+              <input value={newCatKeywords} onChange={e => setNewCatKeywords(e.target.value)} style={inputStyle} placeholder="例: 経済, 賃金, 物価" />
             </div>
             <button onClick={handleAddCategory} style={{ ...btnStyle, width: 'auto', padding: '0.75rem 2rem' }}>
-              항목 추가
+              項目追加
             </button>
           </div>
 
@@ -284,7 +284,7 @@ export default function NDLAdminPage() {
               <div key={cat.id} style={{ padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--border)', position: 'relative' }}>
                 <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--primary)' }}>{cat.category_name}</div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--muted-foreground)', wordBreak: 'break-all' }}>
-                  키워드: {cat.keywords}
+                  キーワード: {cat.keywords}
                 </div>
                 <button 
                   onClick={() => handleDeleteCategory(cat.id)}
@@ -301,17 +301,17 @@ export default function NDLAdminPage() {
         <section style={{ background: 'var(--card)', borderRadius: '12px', padding: '2rem', border: '1px solid var(--border)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', gridColumn: 'span 2' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <h2 style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <BarChart3 size={20} /> 데이터 시각화 라이브러리 (현황)
+              <BarChart3 size={20} /> データ可視化ライブラリ (現況)
             </h2>
             <div style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)' }}>
-              수집 단위: <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{selectedCollection || '전체(최근)'}</span>
+              収集単位: <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{selectedCollection || '全体(最新)'}</span>
             </div>
           </div>
 
           {/* Collection Unit Selector */}
           <div style={{ marginBottom: '2rem', padding: '1rem', background: 'var(--muted)', borderRadius: '8px', border: '1px solid var(--border)' }}>
             <h3 style={{ fontSize: '0.875rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Globe2 size={16} /> 수집 이력 (수집 단위 선택)
+              <Globe2 size={16} /> 収集履歴 (収集単位の選択)
             </h3>
             <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
               <button 
@@ -326,7 +326,7 @@ export default function NDLAdminPage() {
                   border: '1px solid var(--primary)'
                 }}
               >
-                전체(최근)
+                全体(最新)
               </button>
               {collections.map(c => (
                 <button 
@@ -352,7 +352,7 @@ export default function NDLAdminPage() {
             {loadingStats ? (
               <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', gridColumn: 'span 2' }}>
                 <Activity className="animate-spin" size={24} style={{ marginRight: '0.5rem' }} />
-                데이터 분석 및 시각화 준비 중...
+                データ分析および可視化を準備中...
               </div>
             ) : (
               <>
@@ -364,7 +364,7 @@ export default function NDLAdminPage() {
                 )}
                 {!localStats?.analysis?.bySpeaker?.length && !localStats?.analysis?.sentiment && (
                   <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted-foreground)', gridColumn: 'span 2' }}>
-                    로컬에 저장된 {source} 데이터가 없습니다.
+                    ローカルに保存された {source} データがありません。
                   </div>
                 )}
               </>

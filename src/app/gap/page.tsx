@@ -18,10 +18,10 @@ const getDemand = (topic: string) => {
 };
 
 function statusLabel(gap: number) {
-  if (gap > 0.5) return { label: 'Critical Gap', color: '#ef4444' };
-  if (gap > 0.3) return { label: 'Significant Gap', color: '#f59e0b' };
-  if (gap > 0.1) return { label: 'Minor Gap', color: '#3b82f6' };
-  return { label: 'Balanced', color: '#10b981' };
+  if (gap > 0.5) return { label: '致命的なギャップ', color: '#ef4444' };
+  if (gap > 0.3) return { label: '重大なギャップ', color: '#f59e0b' };
+  if (gap > 0.1) return { label: '軽微なギャップ', color: '#3b82f6' };
+  return { label: '良好', color: '#10b981' };
 }
 
 export default function GapAnalysisPage() {
@@ -86,10 +86,10 @@ export default function GapAnalysisPage() {
       <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Strategic Gap Analysis</h1>
-          <p style={{ color: 'var(--muted-foreground)' }}>사회적 수요 vs. 입법 공급 격차 분석 · {summary?.totalRecords?.toLocaleString() ?? 0}건 기반</p>
+          <p style={{ color: 'var(--muted-foreground)' }}>社会的需要 vs. 立法供給の格差分析 · {summary?.totalRecords?.toLocaleString() ?? 0}件に基づく</p>
         </div>
         <button onClick={fetchData} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)', cursor: 'pointer' }}>
-          <RefreshCw size={14} /> 새로고침
+          <RefreshCw size={14} /> リフレッシュ
         </button>
       </header>
 
@@ -101,11 +101,11 @@ export default function GapAnalysisPage() {
           <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <div style={{ width: 12, height: 12, background: 'var(--primary)', borderRadius: 2 }} />
-              <span>Supply (입법 강도 / 데이터 점유)</span>
+              <span>供給 (立法強度 / データシェア)</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <div style={{ width: 2, height: 16, background: 'white', borderRadius: 1 }} />
-              <span>Demand (사회적 수요 목표)</span>
+              <span>需要 (社会的需要の目標)</span>
             </div>
           </div>
         </div>
@@ -113,13 +113,13 @@ export default function GapAnalysisPage() {
         {loading ? (
           <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--muted-foreground)' }}>
             <div className="loader" style={{ margin: '0 auto 1rem' }} />
-            정책 밀도 분석 중...
+            政策密度を分析中...
           </div>
         ) : gaps.length === 0 ? (
           <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--muted-foreground)' }}>
             <Database size={40} style={{ opacity: 0.4, margin: '0 auto 1rem', display: 'block' }} />
-            <p style={{ fontSize: '0.875rem' }}>데이터가 없습니다. 데이터 센터에서 먼저 수집하세요.</p>
-            <a href="/admin/data" style={{ color: 'var(--primary)', fontSize: '0.875rem', marginTop: '0.5rem', display: 'inline-block' }}>→ 데이터 센터로 이동</a>
+            <p style={{ fontSize: '0.875rem' }}>データがありません。データセンターで先に収集してください。</p>
+            <a href="/admin/data" style={{ color: 'var(--primary)', fontSize: '0.875rem', marginTop: '0.5rem', display: 'inline-block' }}>→ データセンターへ移動</a>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -134,8 +134,8 @@ export default function GapAnalysisPage() {
                     </span>
                   </div>
                   <div style={{ fontSize: '0.85rem', display: 'flex', gap: '1.5rem' }}>
-                    <span>수집: <strong style={{ color: 'var(--primary)' }}>{g.count}건</strong></span>
-                    <span>격차: <strong style={{ color: g.color }}>{g.gapPct}%</strong></span>
+                    <span>収集: <strong style={{ color: 'var(--primary)' }}>{g.count}件</strong></span>
+                    <span>格差: <strong style={{ color: g.color }}>{g.gapPct}%</strong></span>
                   </div>
                 </div>
 
@@ -161,8 +161,8 @@ export default function GapAnalysisPage() {
                   <ArrowRight size={18} color="var(--muted-foreground)" />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.35rem', fontSize: '0.7rem', color: 'var(--muted-foreground)' }}>
-                  <span>공급 {(g.supply * 100).toFixed(0)}%</span>
-                  <span>목표 수요 {(g.demand * 100).toFixed(0)}%</span>
+                  <span>供給 {(g.supply * 100).toFixed(0)}%</span>
+                  <span>目標需要 {(g.demand * 100).toFixed(0)}%</span>
                 </div>
               </div>
             ))}
@@ -173,19 +173,19 @@ export default function GapAnalysisPage() {
       {/* Bottom insight cards */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
         <div className="glass" style={{ padding: '1.5rem' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>🔍 전략 권고</h3>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>🔍 戦略的勧告</h3>
           <p style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', lineHeight: 1.7 }}>
             {worstGap
-              ? <>현재 <strong style={{ color: '#ef4444' }}>{worstGap.name}</strong> 분야의 격차가 가장 심각합니다 ({worstGap.gapPct}% Gap). 해당 키워드로 추가 데이터 수집 및 KOL 모니터링을 권장합니다.</>
-              : '데이터를 수집하면 전략적 권고사항이 표시됩니다.'}
+              ? <>現在 <strong style={{ color: '#ef4444' }}>{worstGap.name}</strong> 分野の格差が最も深刻です ({worstGap.gapPct}% Gap)。このキーワードで追加のデータ収集とKOLモニタリングを推奨します。</>
+              : 'データを収集すると、戦略的提案が表示されます。'}
           </p>
         </div>
         <div className="glass" style={{ padding: '1.5rem' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>📊 데이터 신뢰도</h3>
+          <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>📊 データの信頼性</h3>
           <p style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', lineHeight: 1.7 }}>
-            현재 분석 신뢰도 <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{confidencePct}%</span>.
-            총 <strong>{summary?.totalRecords?.toLocaleString() ?? 0}건</strong>의 국회 발언 레코드 기반.
-            {summary?.totalRecords < 500 && <span style={{ color: '#f59e0b' }}> 더 많은 데이터 수집을 권장합니다.</span>}
+            現在の分析信頼度 <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{confidencePct}%</span>.
+            総計 <strong>{summary?.totalRecords?.toLocaleString() ?? 0}件</strong>の国会発言レコードに基づく。
+            {summary?.totalRecords < 500 && <span style={{ color: '#f59e0b' }}> さらなるデータ収集を推奨します。</span>}
           </p>
         </div>
       </div>

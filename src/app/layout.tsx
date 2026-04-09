@@ -12,18 +12,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ja">
       <body>
         <div className="sidebar-nav">
           <div style={{ padding: "0 1rem 2rem 1rem", fontSize: "1.5rem", fontWeight: "bold", color: "var(--primary)" }}>
             PolisayAI
           </div>
           <nav style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <a href="/" className="glass" style={{ padding: "0.75rem 1rem", background: "rgba(59, 130, 246, 0.1)", border: "1px solid rgba(59, 130, 246, 0.2)" }}>Dashboard</a>
-            <a href="/kol" style={{ padding: "0.75rem 1rem" }}>KOL Boards</a>
-            <a href="/politics" style={{ padding: "0.75rem 1rem" }}>Policy Tracking</a>
-            <a href="/gap" style={{ padding: "0.75rem 1rem" }}>Gap Analysis</a>
-            <a href="/admin/data" style={{ padding: "0.75rem 1rem", marginTop: "1rem", borderTop: "1px solid var(--border)", color: "var(--primary)" }}>Data Center</a>
+            <a href="/" className="glass" style={{ padding: "0.75rem 1rem", background: "rgba(59, 130, 246, 0.1)", border: "1px solid rgba(59, 130, 246, 0.2)" }}>ダッシュボード</a>
+            <a href="/kol" style={{ padding: "0.75rem 1rem" }}>KOLボード</a>
+            <a href="/politics" style={{ padding: "0.75rem 1rem" }}>政策トラッキング</a>
+            <a href="/gap" style={{ padding: "0.75rem 1rem" }}>ギャップ分析</a>
+            <a href="/admin/data" style={{ padding: "0.75rem 1rem", marginTop: "1rem", borderTop: "1px solid var(--border)", color: "var(--primary)" }}>データセンター</a>
           </nav>
           <div style={{ marginTop: "auto", padding: "1rem", fontSize: "0.875rem", color: "var(--muted-foreground)" }}>
             v0.1.0-alpha
