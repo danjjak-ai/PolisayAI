@@ -18,6 +18,7 @@ export class NDLCollector extends BaseCollector {
     speaker?: string;
     speakerGroup?: string;
     fromDate?: string;
+    untilDate?: string;
   } = {}): Promise<CollectorResult> {
     const type = options.type || 'speech';
     this.log(`Collecting ${type} data for query: ${query}`);
@@ -32,6 +33,7 @@ export class NDLCollector extends BaseCollector {
       if (options.speaker) url.searchParams.append('speaker', options.speaker);
       if (options.speakerGroup) url.searchParams.append('speakerGroup', options.speakerGroup);
       if (options.fromDate) url.searchParams.append('from', options.fromDate);
+      if (options.untilDate) url.searchParams.append('until', options.untilDate);
 
       const response = await fetch(url.toString());
       if (!response.ok) {

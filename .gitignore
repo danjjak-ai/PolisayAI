@@ -34,7 +34,12 @@
 # misc
 .DS_Store
 *.pem
-.env*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
 .vercel
 *.tsbuildinfo
 next-env.d.ts

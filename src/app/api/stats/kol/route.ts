@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { DataAggregator } from '@/lib/collectors/aggregator';
 
@@ -6,3 +7,4 @@ export async function GET() {
   const stats = await aggregator.getSpeakerStats();
   return NextResponse.json(stats);
 }
+

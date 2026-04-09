@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { NDLDownloader } from '@/lib/collectors/downloader';
 import { AnalysisManager } from '@/lib/analysis/manager';
@@ -32,3 +33,4 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+

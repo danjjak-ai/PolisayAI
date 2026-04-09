@@ -4,6 +4,7 @@ export interface DownloadStatus {
   currentPage: number;
   status: 'idle' | 'running' | 'completed' | 'error';
   lastFile?: string;
+  logs: string[];
 }
 
 // In-memory status store for demo purposes

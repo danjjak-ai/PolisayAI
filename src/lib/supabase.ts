@@ -1,6 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
+let supabaseInstance: any = null;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'your-service-role-key';
+try {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+  if (supabaseUrl && supabaseUrl.startsWith('http') && supabaseKey && supabaseKey !== '') {
+    supabaseInstance = createClient(supabaseUrl, supabaseKey);
+  }
+} catch (e) {
+  console.warn('[Supabase] Failed to initialize client:', e);
+}
+
+export const supabase = supabaseInstance;

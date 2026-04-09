@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Download, Activity, FileJson, Play, BarChart3, Settings2, Globe2, Share2 } from 'lucide-react';
 import SpeakerVolumeChart from '@/components/charts/SpeakerVolumeChart';
+import SentimentDistributionChart from '@/components/charts/SentimentDistributionChart';
 
 type DataSource = 'KR' | 'JP' | 'SOCIAL';
 
@@ -25,20 +26,76 @@ export default function NDLAdminPage() {
 
   const [status, setStatus] = useState<any>(null);
   const [localStats, setLocalStats] = useState<any>(null);
+  const [loadingStats, setLoadingStats] = useState(false);
+  const [collections, setCollections] = useState<any[]>([]);
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+
+  // Policy Categories State
+  const [categories, setCategories] = useState<any[]>([]);
+  const [newCatName, setNewCatName] = useState('');
+  const [newCatKeywords, setNewCatKeywords] = useState('');
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch(`/api/ndl/status?q=${query}`);
+      const res = await fetch(`/api/ndl/status?source=${source}&q=${query}`);
       const data = await res.json();
       setStatus(data);
+      
+      // If just completed, refresh stats
+      if (data.status === 'completed' && status?.status === 'running') {
+        fetchLocalStats();
+      }
     } catch (e) { console.error(e); }
   };
 
-  const fetchLocalStats = async () => {
+  const fetchLocalStats = async (prefix?: string) => {
+    setLoadingStats(true);
     try {
-      const res = await fetch(`/api/ndl/analyze-local?q=${query}`);
+      const url = prefix ? `/api/ndl/analyze-local?prefix=${prefix}` : `/api/ndl/analyze-local?q=${query}`;
+      const res = await fetch(url);
       const data = await res.json();
       setLocalStats(data);
+    } catch (e) { console.error(e); }
+    finally { setLoadingStats(false); }
+  };
+
+  const fetchCollections = async () => {
+    try {
+      const res = await fetch('/api/ndl/collections');
+      const data = await res.json();
+      setCollections(data);
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('/api/policy-categories');
+      setCategories(await res.json());
+    } catch (e) { console.error(e); }
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCatName || !newCatKeywords) return;
+    try {
+      const res = await fetch('/api/policy-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category_name: newCatName, keywords: newCatKeywords })
+      });
+      if (res.ok) {
+        setNewCatName('');
+        setNewCatKeywords('');
+        fetchCategories();
+      } else {
+        alert('카테고리 추가 실패: ' + (await res.json()).error);
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    try {
+      await fetch('/api/policy-categories?id=' + id, { method: 'DELETE' });
+      fetchCategories();
     } catch (e) { console.error(e); }
   };
 
@@ -50,6 +107,7 @@ export default function NDLAdminPage() {
       ...Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''))
     });
     
+    setStatus({ status: 'running', currentPage: 0, totalPage: pages, logs: ['수집 요청 전송 중...'] });
     fetch(`/api/ndl/download?${searchParams.toString()}`);
     setTimeout(fetchStatus, 500);
   };
@@ -57,6 +115,8 @@ export default function NDLAdminPage() {
   useEffect(() => {
     const interval = setInterval(fetchStatus, 2000);
     fetchLocalStats();
+    fetchCollections();
+    fetchCategories();
     return () => clearInterval(interval);
   }, [query, source]);
 
@@ -113,6 +173,17 @@ export default function NDLAdminPage() {
               </div>
             </div>
 
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>시작일</label>
+                <input type="date" value={params.from} onChange={e => setParams({...params, from: e.target.value})} style={inputStyle} />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>종료일</label>
+                <input type="date" value={params.until} onChange={e => setParams({...params, until: e.target.value})} style={inputStyle} />
+              </div>
+            </div>
+
             {/* Source Specific Params */}
             {source === 'JP' && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -164,24 +235,141 @@ export default function NDLAdminPage() {
               <div style={{ width: '100%', height: '8px', background: 'var(--muted)', borderRadius: '4px' }}>
                 <div style={{ width: `${(status.currentPage / status.totalPage) * 100}%`, height: '100%', background: 'var(--primary)', transition: 'width 0.5s' }} />
               </div>
+              <div style={{ 
+                marginTop: '1rem', 
+                padding: '1rem', 
+                background: '#000', 
+                borderRadius: '4px', 
+                fontSize: '0.75rem', 
+                fontFamily: 'monospace', 
+                height: '150px', 
+                overflowY: 'auto',
+                border: '1px solid var(--border)'
+              }}>
+                {status.logs?.map((log: string, i: number) => (
+                  <div key={i} style={{ color: '#0f0', marginBottom: '0.25rem' }}>{`> ${log}`}</div>
+                ))}
+              </div>
             </div>
           ) : (
             <p style={{ color: 'var(--muted-foreground)' }}>준비 완료. 파라미터를 설정하고 수집을 시작하세요.</p>
           )}
         </section>
 
-        {/* Analytics Section */}
+        {/* Policy Category Management */}
         <section className="glass" style={{ padding: '2rem', gridColumn: 'span 2' }}>
-           <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <BarChart3 size={20} /> 데이터 시각화 라이브러리 (현황)
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Settings2 size={20} /> AI 정책 카테고리 관리 (키워드 매핑)
           </h2>
-          {localStats && localStats.analysis?.bySpeaker?.length > 0 ? (
-            <SpeakerVolumeChart data={localStats.analysis.bySpeaker} />
-          ) : (
-            <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted-foreground)' }}>
-              로컬에 저장된 {source} 데이터가 없습니다.
+          <p style={{ color: 'var(--muted-foreground)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+            분석 엔진이 텍스트를 파싱할 때 인식할 정책 카테고리와 매칭 키워드를 설정하세요. 여기에 추가된 카테고리는 전체 대시보드와 정책 추이에 동적으로 반영됩니다.
+          </p>
+          
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', alignItems: 'flex-end' }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>카테고리명 (예: 경제)</label>
+              <input value={newCatName} onChange={e => setNewCatName(e.target.value)} style={inputStyle} placeholder="신규 카테고리 로벨" />
             </div>
-          )}
+            <div style={{ flex: 2 }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>스캔 키워드 (쉼표 구분)</label>
+              <input value={newCatKeywords} onChange={e => setNewCatKeywords(e.target.value)} style={inputStyle} placeholder="예: 경제, 펀드, 주식, 물가" />
+            </div>
+            <button onClick={handleAddCategory} style={{ ...btnStyle, width: 'auto', padding: '0.75rem 2rem' }}>
+              항목 추가
+            </button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+            {categories.map(cat => (
+              <div key={cat.id} style={{ padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--border)', position: 'relative' }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--primary)' }}>{cat.category_name}</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--muted-foreground)', wordBreak: 'break-all' }}>
+                  키워드: {cat.keywords}
+                </div>
+                <button 
+                  onClick={() => handleDeleteCategory(cat.id)}
+                  style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1.25rem' }}
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Visualization & History Section */}
+        <section style={{ background: 'var(--card)', borderRadius: '12px', padding: '2rem', border: '1px solid var(--border)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', gridColumn: 'span 2' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <BarChart3 size={20} /> 데이터 시각화 라이브러리 (현황)
+            </h2>
+            <div style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)' }}>
+              수집 단위: <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{selectedCollection || '전체(최근)'}</span>
+            </div>
+          </div>
+
+          {/* Collection Unit Selector */}
+          <div style={{ marginBottom: '2rem', padding: '1rem', background: 'var(--muted)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+            <h3 style={{ fontSize: '0.875rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Globe2 size={16} /> 수집 이력 (수집 단위 선택)
+            </h3>
+            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+              <button 
+                onClick={() => { setSelectedCollection(null); fetchLocalStats(); }}
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  borderRadius: '20px', 
+                  fontSize: '0.75rem', 
+                  whiteSpace: 'nowrap',
+                  background: !selectedCollection ? 'var(--primary)' : 'transparent',
+                  color: !selectedCollection ? 'white' : 'var(--foreground)',
+                  border: '1px solid var(--primary)'
+                }}
+              >
+                전체(최근)
+              </button>
+              {collections.map(c => (
+                <button 
+                  key={c.id}
+                  onClick={() => { setSelectedCollection(c.id); fetchLocalStats(c.id); }}
+                  style={{ 
+                    padding: '0.5rem 1rem', 
+                    borderRadius: '20px', 
+                    fontSize: '0.75rem', 
+                    whiteSpace: 'nowrap',
+                    background: selectedCollection === c.id ? 'var(--primary)' : 'transparent',
+                    color: selectedCollection === c.id ? 'white' : 'var(--foreground)',
+                    border: '1px solid var(--border)'
+                  }}
+                >
+                  {`${c.source} | ${c.query} (${c.from} ~ ${c.until})`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: localStats?.analysis?.sentiment ? '1fr 1fr' : '1fr', gap: '2rem' }}>
+            {loadingStats ? (
+              <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', gridColumn: 'span 2' }}>
+                <Activity className="animate-spin" size={24} style={{ marginRight: '0.5rem' }} />
+                데이터 분석 및 시각화 준비 중...
+              </div>
+            ) : (
+              <>
+                {localStats && localStats.analysis?.bySpeaker?.length > 0 && (
+                  <SpeakerVolumeChart data={localStats.analysis.bySpeaker} />
+                )}
+                {localStats && localStats.analysis?.sentiment && (
+                  <SentimentDistributionChart data={localStats.analysis.sentiment.distribution} />
+                )}
+                {!localStats?.analysis?.bySpeaker?.length && !localStats?.analysis?.sentiment && (
+                  <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted-foreground)', gridColumn: 'span 2' }}>
+                    로컬에 저장된 {source} 데이터가 없습니다.
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </section>
       </div>
     </div>

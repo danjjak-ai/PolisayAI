@@ -1,8 +1,8 @@
-import { supabase } from './supabase';
+import { getDb } from './local_db';
 
 export class DataService {
   /**
-   * Saves analyzed speech data to the database
+   * Saves analyzed speech data to the local SQLite database
    */
   async saveAnalyzedSpeech(data: {
     politician_id: string;
@@ -10,59 +10,80 @@ export class DataService {
     source_type: string;
     analysis: any;
   }) {
-    const { data: speech, error: speechError } = await supabase
-      .from('speeches')
-      .insert({
-        politician_id: data.politician_id,
-        content: data.content,
-        source_type: data.source_type,
-        relevance_score: data.analysis.score,
-      })
-      .select()
-      .single();
+    const db = getDb();
+    
+    try {
+      // 1. Insert Speech
+      const stmt = db.prepare(`
+        INSERT INTO speeches (politician_id, content, source, sentiment_score, policy_relevance, summary, analysis_raw)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `);
+      
+      const result = stmt.run(
+        data.politician_id,
+        data.content,
+        data.source_type,
+        data.analysis.sentiment?.score || 0,
+        data.analysis.score || 0,
+        data.analysis.summary || '',
+        JSON.stringify(data.analysis)
+      );
 
-    if (speechError) throw speechError;
+      const speechId = result.lastInsertRowid;
 
-    // Save topic classifications
-    const topicInserts = data.analysis.tags.map((tag: string) => ({
-      reference_id: speech.id,
-      reference_type: 'speech',
-      topic_label: tag,
-      confidence_score: 0.9, // Simplified
-      method: 'LLM'
-    }));
+      // 2. Insert Topics
+      if (data.analysis.tags && Array.isArray(data.analysis.tags)) {
+        const topicStmt = db.prepare('INSERT INTO topic_classifications (speech_id, topic, confidence) VALUES (?, ?, ?)');
+        for (const tag of data.analysis.tags) {
+          topicStmt.run(speechId, tag, 0.9);
+        }
+      }
 
-    const { error: topicError } = await supabase
-      .from('topic_classifications')
-      .insert(topicInserts);
-
-    if (topicError) throw topicError;
-
-    return speech;
+      return { id: speechId, ...data };
+    } catch (error) {
+      console.error('[DataService] Error saving to SQLite:', error);
+      throw error;
+    }
   }
 
   /**
-   * Fetches a KOL's profile with their recent analyzed activity
+   * Fetches a KOL's profile with their recent analyzed activity from SQLite
    */
   async getKOLProfile(id: string) {
-    const { data: politician, error: polError } = await supabase
-      .from('politicians')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const db = getDb();
+    
+    try {
+      const politician = db.prepare('SELECT * FROM politicians WHERE id = ?').get(id);
+      if (!politician) return null;
 
-    if (polError) return null;
+      const speeches = db.prepare(`
+        SELECT s.*, GROUP_CONCAT(t.topic) as topics
+        FROM speeches s
+        LEFT JOIN topic_classifications t ON s.id = t.speech_id
+        WHERE s.politician_id = ?
+        GROUP BY s.id
+        ORDER BY s.created_at DESC
+        LIMIT 10
+      `).all(id);
 
-    const { data: recentSpeeches, error: speechError } = await supabase
-      .from('speeches')
-      .select('*, topic_classifications(*)')
-      .eq('politician_id', id)
-      .order('created_at', { ascending: false })
-      .limit(10);
+      return {
+        ...(politician as any),
+        recentActivity: speeches.map((s: any) => ({
+          ...s,
+          topics: s.topics ? s.topics.split(',') : []
+        }))
+      };
+    } catch (error) {
+      console.error('[DataService] Error fetching from SQLite:', error);
+      return null;
+    }
+  }
 
-    return {
-      ...politician,
-      recentActivity: recentSpeeches || []
-    };
+  /**
+   * List all politicians
+   */
+  async getAllPoliticians() {
+    const db = getDb();
+    return db.prepare('SELECT * FROM politicians ORDER BY name ASC').all();
   }
 }
