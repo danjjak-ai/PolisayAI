@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
 
 # next.js
 /.next/
@@ -43,6 +45,10 @@
 .vercel
 *.tsbuildinfo
 next-env.d.ts
+.eslintcache
+.vscode/
+.idea/
+*.log
 
 # debug
 npm-debug.log*
@@ -54,3 +60,12 @@ yarn-error.log*
 .venv/
 __pycache__/
 *.py[cod]
+.python-version
+
+# databases
+*.db
+*.sqlite
+*.sqlite3
+data/polisay.db
+Dockerfile
+data/polisay.db

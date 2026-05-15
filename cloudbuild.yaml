@@ -1,0 +1,36 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/polisayai',
+      '--build-arg', 'NEXT_PUBLIC_SUPABASE_URL=${_NEXT_PUBLIC_SUPABASE_URL}',
+      '--build-arg', 'NEXT_PUBLIC_SUPABASE_ANON_KEY=${_NEXT_PUBLIC_SUPABASE_ANON_KEY}',
+      '.'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/polisayai']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'polisayai'
+      - '--image'
+      - 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/polisayai'
+      - '--region'
+      - 'asia-northeast3'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'GOOGLE_GENERATIVE_AI_API_KEY=${_GOOGLE_GENERATIVE_AI_API_KEY},EXA_API_KEY=${_EXA_API_KEY},SUPABASE_SERVICE_ROLE_KEY=${_SUPABASE_SERVICE_ROLE_KEY},NEXT_PUBLIC_SUPABASE_URL=${_NEXT_PUBLIC_SUPABASE_URL},NEXT_PUBLIC_SUPABASE_ANON_KEY=${_NEXT_PUBLIC_SUPABASE_ANON_KEY}'
+
+images:
+  - 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/polisayai'
+
+substitutions:
+  _NEXT_PUBLIC_SUPABASE_URL: ''
+  _NEXT_PUBLIC_SUPABASE_ANON_KEY: ''
+  _GOOGLE_GENERATIVE_AI_API_KEY: ''
+  _EXA_API_KEY: ''
+  _SUPABASE_SERVICE_ROLE_KEY: ''

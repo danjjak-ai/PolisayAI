@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.agent
+.env
+README.md
+SOUL.md
+AGENTS.md
+research.md
+tests
+playwright-report
+test-results
+supabase
+data
