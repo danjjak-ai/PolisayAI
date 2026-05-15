@@ -4,6 +4,10 @@
 
 ---
 
+![PolisayAI Dashboard](./public/app_preview.png)
+
+---
+
 <a name="english"></a>
 ## 🇺🇸 English
 
@@ -19,7 +23,7 @@ By analyzing real-time data from the National Diet Library (NDL) API, tracking t
 *   **🏗️ Data Center (Admin)**: Multi-source (KR/JP) data collection controller with detailed parameter settings.
 
 ### 🛠️ Tech Stack
-*   **Frontend**: Next.js 15 (App Router), Lucide React.
+*   **Frontend**: Next.js 16 (App Router), Lucide React.
 *   **Visualization**: Recharts (Dynamic SVG Charts).
 *   **Database**: Better-SQLite3 (Category & Collection Management).
 *   **AI/Analysis**: Gemini 2.0 Flash (Policy Relevance & Intent Analysis).
@@ -41,7 +45,7 @@ PolisayAIは、日本の政界における膨大な立法データと政策受�
 *   **🏗️ データセンター (Admin)**: 日韓マルチソースデータ収集機のコントロールおよび詳細パラメータ設定機能。
 
 ### 🛠️ 技術スタック
-*   **Frontend**: Next.js 15 (App Router), Lucide React.
+*   **Frontend**: Next.js 16 (App Router), Lucide React.
 *   **Visualization**: Recharts (Dynamic SVG Charts).
 *   **Database**: Better-SQLite3 (カテゴリー・収集履歴管理).
 *   **AI/Analysis**: Gemini 2.0 Flash (政策関連性および意図分析).
@@ -63,7 +67,7 @@ PolisayAI는 일본 정계의 방대한 입법 데이터와 정책 수혜자들�
 *   **🏗️ 데이터 센터 (Admin)**: 한/일 멀티 소스 데이터 수집기 컨트롤 및 수집 파라미터 상세 설정 기능.
 
 ### 🛠️ 기술 스택
-*   **Frontend**: Next.js 15 (App Router), Lucide React.
+*   **Frontend**: Next.js 16 (App Router), Lucide React.
 *   **Visualization**: Recharts (Dynamic SVG Charts).
 *   **Database**: Better-SQLite3 (카테고리 및 수집 이력 관리).
 *   **AI/Analysis**: Gemini 2.0 Flash (정책 관련성 및 의도 분석).
