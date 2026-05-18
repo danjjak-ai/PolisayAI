@@ -28,10 +28,12 @@ By analyzing real-time data from the National Diet Library (NDL) API, tracking t
     <br>![Data Center](./public/screenshots/data_center.png)
 
 ### 🛠️ Tech Stack
-*   **Frontend**: Next.js 16 (App Router), Lucide React.
-*   **Visualization**: Recharts (Dynamic SVG Charts).
-*   **Database**: Better-SQLite3 (Category & Collection Management).
-*   **AI/Analysis**: Gemini 2.0 Flash (Policy Relevance & Intent Analysis).
+*   **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Lucide React
+*   **Visualization**: Recharts (Dynamic SVG Charts)
+*   **Database & Backend**: Supabase, Better-SQLite3
+*   **AI/Analysis**: Gemini API (Google Generative AI)
+*   **Testing**: Playwright (E2E Testing)
+*   **DevOps & Deployment**: Docker, Google Cloud Build
 
 ---
 
@@ -55,10 +57,12 @@ PolisayAIは、日本の政界における膨大な立法データと政策受�
     <br>![Data Center](./public/screenshots/data_center.png)
 
 ### 🛠️ 技術スタック
-*   **Frontend**: Next.js 16 (App Router), Lucide React.
-*   **Visualization**: Recharts (Dynamic SVG Charts).
-*   **Database**: Better-SQLite3 (カテゴリー・収集履歴管理).
-*   **AI/Analysis**: Gemini 2.0 Flash (政策関連性および意図分析).
+*   **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Lucide React
+*   **Visualization**: Recharts (Dynamic SVG Charts)
+*   **Database & Backend**: Supabase, Better-SQLite3
+*   **AI/Analysis**: Gemini API (Google Generative AI)
+*   **Testing**: Playwright (E2E Testing)
+*   **DevOps & Deployment**: Docker, Google Cloud Build
 
 ---
 
@@ -82,10 +86,12 @@ PolisayAI는 일본 정계의 방대한 입법 데이터와 정책 수혜자들�
     <br>![Data Center](./public/screenshots/data_center.png)
 
 ### 🛠️ 기술 스택
-*   **Frontend**: Next.js 16 (App Router), Lucide React.
-*   **Visualization**: Recharts (Dynamic SVG Charts).
-*   **Database**: Better-SQLite3 (카테고리 및 수집 이력 관리).
-*   **AI/Analysis**: Gemini 2.0 Flash (정책 관련성 및 의도 분석).
+*   **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Lucide React
+*   **Visualization**: Recharts (Dynamic SVG Charts)
+*   **Database & Backend**: Supabase, Better-SQLite3
+*   **AI/Analysis**: Gemini API (Google Generative AI)
+*   **Testing**: Playwright (E2E 테스트)
+*   **DevOps & Deployment**: Docker, Google Cloud Build
 
 ---
 
