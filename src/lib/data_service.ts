@@ -47,6 +47,29 @@ export class DataService {
   }
 
   /**
+   * Ensures a politician profile exists in the database
+   */
+  async ensurePoliticianExists(id: string, name: string, party: string, country: string = 'JP') {
+    const db = getDb();
+    try {
+      const politician = db.prepare('SELECT * FROM politicians WHERE id = ? OR name = ?').get(id, name);
+      if (politician) {
+        return politician as any;
+      }
+      
+      db.prepare(`
+        INSERT INTO politicians (id, name, country, party, position)
+        VALUES (?, ?, ?, ?, ?)
+      `).run(id, name, country, party, '議員');
+      
+      return { id, name, country, party, position: '議員' };
+    } catch (e) {
+      console.error('[DataService] Error in ensurePoliticianExists:', e);
+      return null;
+    }
+  }
+
+  /**
    * Fetches a KOL's profile with their recent analyzed activity from SQLite
    */
   async getKOLProfile(id: string) {
