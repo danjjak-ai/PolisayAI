@@ -1,6 +1,8 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseOffice } from 'officeparser';
+// @ts-ignore
+import pdfParse from 'pdf-parse';
 import { DataService } from '@/lib/data_service';
 import fs from 'fs';
 import path from 'path';
@@ -47,13 +49,20 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Parse office file using officeparser
+    // Parse file based on extension to avoid Next.js bundling/worker issues with officeparser's PDF implementation
     let extractedText = '';
+    const extension = path.extname(file.name).toLowerCase();
+
     try {
-      const ast = await parseOffice(buffer);
-      extractedText = ast.toText();
+      if (extension === '.pdf') {
+        const pdfData = await pdfParse(buffer);
+        extractedText = pdfData.text || '';
+      } else {
+        const ast = await parseOffice(buffer);
+        extractedText = ast.toText();
+      }
     } catch (parseError: any) {
-      console.error('[Upload API] officeparser error:', parseError);
+      console.error('[Upload API] parsing error:', parseError);
       return NextResponse.json({ error: `파일 파싱 실패: ${parseError.message || parseError}` }, { status: 500 });
     }
 
